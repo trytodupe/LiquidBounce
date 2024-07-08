@@ -83,7 +83,7 @@ object ModuleManager : Listenable, Iterable<Module> by modules {
     @Suppress("unused")
     val keyHandler = handler<KeyEvent> { ev ->
         if (ev.action == GLFW.GLFW_PRESS) {
-            filter { it.bind == ev.key.keyCode } // modules bound to a specific key
+            filter { it.bind == ev.key.keyCode && !it.lockedState} // modules bound to a specific key
                 .forEach { it.enabled = !it.enabled } // toggle modules
         }
     }
@@ -270,6 +270,7 @@ object ModuleManager : Listenable, Iterable<Module> by modules {
             ModuleScaffold,
             ModuleTimer,
             ModuleNuker,
+            ModuleGhostBlock,
 
             // Client
             ModuleAutoConfig,

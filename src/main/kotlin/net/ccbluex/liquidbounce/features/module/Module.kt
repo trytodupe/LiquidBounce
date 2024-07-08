@@ -71,6 +71,7 @@ open class Module(
     bind: Int = GLFW.GLFW_KEY_UNKNOWN, // default bind
     state: Boolean = false, // default state
     @Exclude val disableActivation: Boolean = false, // disable activation
+    @Exclude val lockedState: Boolean = false, // state can
     hide: Boolean = false, // default hide
     @Exclude val disableOnQuit: Boolean = false, // disables module when player leaves the world,
     @Exclude val aliases: Array<out String> = emptyArray() // additional names under which the module is known
