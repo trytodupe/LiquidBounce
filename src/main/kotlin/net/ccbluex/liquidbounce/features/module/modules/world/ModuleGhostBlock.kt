@@ -17,7 +17,7 @@ import org.lwjgl.glfw.GLFW
 /**
  * GhostBlock Module
  *
- * Remove blocks client side.
+ * Remove blocks client-side.
  */
 object ModuleGhostBlock : Module("GhostBlock", Category.WORLD, lockedState = true) {
 
