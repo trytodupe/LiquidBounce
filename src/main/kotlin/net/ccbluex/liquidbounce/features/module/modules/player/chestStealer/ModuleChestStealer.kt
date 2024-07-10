@@ -45,7 +45,7 @@ object ModuleChestStealer : Module("ChestStealer", Category.PLAYER) {
     object ItemFilter : ToggleableConfigurable(this, "ItemFilter", true) {
         val itemList by textArray("ItemList", mutableListOf("Emerald"))
     }
-    val autoClose by boolean("AutoClose", true)
+    val autoClose by boolean("AutoClose", false)
 
     val selectionMode by enumChoice("SelectionMode", SelectionMode.DISTANCE)
     val itemMoveMode by enumChoice("MoveMode", ItemMoveMode.QUICK_MOVE)
