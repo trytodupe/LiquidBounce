@@ -21,17 +21,16 @@
 package net.ccbluex.liquidbounce.features.module.modules.player.chestStealer
 
 import net.ccbluex.liquidbounce.config.NamedChoice
+import net.ccbluex.liquidbounce.config.ToggleableConfigurable
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.events.ScheduleInventoryActionEvent
 import net.ccbluex.liquidbounce.features.module.Category
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.modules.player.chestStealer.features.FeatureChestAura
 import net.ccbluex.liquidbounce.features.module.modules.player.invcleaner.*
-import net.ccbluex.liquidbounce.utils.client.chat
 import net.ccbluex.liquidbounce.utils.inventory.*
 import net.ccbluex.liquidbounce.utils.item.*
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
-import net.minecraft.text.Text
 import kotlin.math.ceil
 
 /**
@@ -43,16 +42,20 @@ import kotlin.math.ceil
 object ModuleChestStealer : Module("ChestStealer", Category.PLAYER) {
 
     val inventoryConstrains = tree(InventoryConstraints())
+    object ItemFilter : ToggleableConfigurable(this, "ItemFilter", true) {
+        val itemList by textArray("ItemList", mutableListOf("Emerald"))
+    }
     val autoClose by boolean("AutoClose", true)
 
     val selectionMode by enumChoice("SelectionMode", SelectionMode.DISTANCE)
     val itemMoveMode by enumChoice("MoveMode", ItemMoveMode.QUICK_MOVE)
-    val quickSwaps by boolean("QuickSwaps", true)
+    val quickSwaps by boolean("QuickSwaps", false)
 
     val checkTitle by boolean("CheckTitle", true)
 
     init {
         tree(FeatureChestAura)
+        tree(ItemFilter)
     }
 
     override fun disable() {
@@ -143,10 +146,7 @@ object ModuleChestStealer : Module("ChestStealer", Category.PLAYER) {
     private fun isScreenTitleChest(screen: GenericContainerScreen): Boolean {
         val titleString = screen.title.string
 
-        return arrayOf("container.chest", "container.chestDouble", "container.enderchest", "container.shulkerBox",
-            "container.barrel")
-            .map { Text.translatable(it); }
-            .any { it.string == titleString }
+        return titleString.contains("Loot Chest")
     }
 
 
@@ -190,7 +190,24 @@ object ModuleChestStealer : Module("ChestStealer", Category.PLAYER) {
      */
     private fun createCleanupPlan(screen: GenericContainerScreen): InventoryCleanupPlan {
         val cleanupPlan = if (!ModuleInventoryCleaner.enabled) {
-            val usefulItems = findItemsInContainer(screen)
+            var usefulItems = findItemsInContainer(screen)
+
+            if (ItemFilter.enabled) {
+//                println("mark A")
+//                for (containerItemSlot in usefulItems) {
+//                    print(containerItemSlot.itemStack.name.string + " ")
+//                }
+//                println()
+//                for (filterItem in ItemFilter.itemList) {
+//                    print(filterItem)
+//                }
+//                println()
+                usefulItems = usefulItems.filter { containerItemSlot ->
+                    ItemFilter.itemList.any{ filterItem ->
+                        containerItemSlot.itemStack.name.string.contains(filterItem, true)
+                    }
+                }
+            }
 
             InventoryCleanupPlan(usefulItems.toMutableSet(), mutableListOf(), hashMapOf())
         } else {
