@@ -65,22 +65,22 @@ val globalEnemyConfigurable = EnemyConfigurable()
 class EnemyConfigurable : Configurable("Enemies") {
 
     // Players should be considered as an enemy
-    var players by boolean("Players", true)
+    var players by boolean("Players", false)
 
     // Hostile mobs (like skeletons and zombies) should be considered as an enemy
-    var hostile by boolean("Hostile", true)
+    var hostile by boolean("Hostile", false)
 
     // Angerable mobs (like wolfs) should be considered as an enemy
-    val angerable by boolean("Angerable", true)
+    val angerable by boolean("Angerable", false)
 
     // Water Creature mobs should be considered as an enemy
-    val waterCreature by boolean("WaterCreature", true)
+    val waterCreature by boolean("WaterCreature", false)
 
     // Passive mobs (like cows, pigs and so on) should be considered as an enemy
     var passive by boolean("Passive", false)
 
     // Invisible entities should be also considered as an enemy
-    var invisible by boolean("Invisible", true)
+    var invisible by boolean("Invisible", false)
 
     // Dead entities should NOT be considered as an enemy - but this is useful to bypass anti-cheats
     var dead by boolean("Dead", false)

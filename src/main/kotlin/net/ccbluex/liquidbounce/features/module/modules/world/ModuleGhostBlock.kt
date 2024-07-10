@@ -83,6 +83,6 @@ object ModuleGhostBlock : Module("GhostBlock", Category.WORLD, lockedState = tru
         override val parent: ChoiceConfigurable<Choice>
             get() = modes
 
-        val delay by int("Delay", 5, 0..20, "ticks")
+        val delay by int("Delay", 2, 0..20, "ticks")
     }
 }
