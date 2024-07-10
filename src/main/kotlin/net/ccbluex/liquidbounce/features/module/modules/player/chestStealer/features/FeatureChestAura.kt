@@ -50,7 +50,7 @@ import net.minecraft.util.math.Box
  * ChestAura feature is responsible for automatically interacting with storage blocks (such as chests)
  * within a specified range and line of sight of the player.
  */
-object FeatureChestAura : ToggleableConfigurable(ModuleChestStealer, "Aura", true) {
+object FeatureChestAura : ToggleableConfigurable(ModuleChestStealer, "Aura", false) {
 
     // Configuration fields with appropriate names
     private val interactionRange by float("Range", 3F, 1F..6F)
