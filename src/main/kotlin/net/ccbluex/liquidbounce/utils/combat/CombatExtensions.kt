@@ -34,6 +34,7 @@ import net.ccbluex.liquidbounce.utils.kotlin.toDouble
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.Entity
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.mob.Angerable
@@ -42,6 +43,7 @@ import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.mob.WaterCreatureEntity
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Hand
@@ -66,6 +68,8 @@ class EnemyConfigurable : Configurable("Enemies") {
 
     // Players should be considered as an enemy
     var players by boolean("Players", false)
+
+    var items by boolean("Items", true)
 
     // Hostile mobs (like skeletons and zombies) should be considered as an enemy
     var hostile by boolean("Hostile", false)
@@ -145,6 +149,8 @@ class EnemyConfigurable : Configurable("Enemies") {
                     return angerable
                 }
             }
+        } else if (suspect is ItemEntity && !attackable) {
+            return items && suspect.stack.item != Items.EMERALD
         }
 
         return false

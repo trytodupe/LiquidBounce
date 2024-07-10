@@ -31,6 +31,7 @@ import net.ccbluex.liquidbounce.render.engine.Color4b
 import net.ccbluex.liquidbounce.utils.combat.shouldBeShown
 import net.ccbluex.liquidbounce.utils.entity.interpolateCurrentPosition
 import net.minecraft.entity.Entity
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Box
@@ -48,7 +49,7 @@ object ModuleESP : Module("ESP", Category.RENDER) {
         get() = "liquidbounce.module.esp"
 
     private val modes = choices("Mode", GlowMode, arrayOf(BoxMode, OutlineMode, GlowMode))
-    private val colorModes = choices<GenericColorMode<LivingEntity>>("ColorMode", { it.choices[0] },
+    private val colorModes = choices<GenericColorMode<Entity>>("ColorMode", { it.choices[0] },
         { arrayOf(
             GenericEntityHealthColorMode(it),
             GenericStaticColorMode(it, Color4b.WHITE.alpha(100)),
@@ -102,7 +103,9 @@ object ModuleESP : Module("ESP", Category.RENDER) {
         }
     }
 
-    fun findRenderedEntities() = world.entities.filterIsInstance<LivingEntity>().filter { it.shouldBeShown() }
+    fun findRenderedEntities() = world.entities
+        .filter{ it is LivingEntity || it is ItemEntity }
+        .filter { it.shouldBeShown() }
 
     object GlowMode : Choice("Glow") {
 
@@ -116,7 +119,7 @@ object ModuleESP : Module("ESP", Category.RENDER) {
             get() = modes
     }
 
-    private fun getBaseColor(entity: LivingEntity): Color4b {
+    private fun getBaseColor(entity: Entity): Color4b {
         if (entity is PlayerEntity) {
             if (FriendManager.isFriend(entity) && friendColor.a > 0) {
                 return friendColor
@@ -132,7 +135,10 @@ object ModuleESP : Module("ESP", Category.RENDER) {
         return colorModes.activeChoice.getColor(entity)
     }
 
-    fun getColor(entity: LivingEntity): Color4b {
+    fun getColor(entity: Entity): Color4b {
+        if (entity !is LivingEntity) {
+            return colorModes.activeChoice.getColor(entity)
+        }
         val baseColor = getBaseColor(entity)
 
         if (entity.hurtTime > 0) {

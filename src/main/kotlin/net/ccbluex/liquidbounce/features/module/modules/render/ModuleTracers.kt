@@ -18,7 +18,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.render
 
-import net.ccbluex.liquidbounce.config.Choice
 import net.ccbluex.liquidbounce.config.ChoiceConfigurable
 import net.ccbluex.liquidbounce.event.events.WorldRenderEvent
 import net.ccbluex.liquidbounce.event.handler
@@ -33,7 +32,6 @@ import net.ccbluex.liquidbounce.render.drawLines
 import net.ccbluex.liquidbounce.render.engine.Color4b
 import net.ccbluex.liquidbounce.render.engine.Vec3
 import net.ccbluex.liquidbounce.render.renderEnvironmentForWorld
-import net.ccbluex.liquidbounce.render.utils.rainbow
 import net.ccbluex.liquidbounce.render.withColor
 import net.ccbluex.liquidbounce.utils.combat.shouldBeShown
 import net.ccbluex.liquidbounce.utils.entity.interpolateCurrentPosition
@@ -66,14 +64,14 @@ object ModuleTracers : Module("Tracers", Category.RENDER) {
 
 
 
-    private object DistanceColor : GenericColorMode<LivingEntity>("Distance") {
+    private object DistanceColor : GenericColorMode<Entity>("Distance") {
         override val parent: ChoiceConfigurable<*>
             get() = modes
 
         val useViewDistance by boolean("UseViewDistance", true)
         val customViewDistance by float("CustomViewDistance", 128.0F, 1.0F..512.0F)
 
-        override fun getColor(param: LivingEntity): Color4b = throw NotImplementedError()
+        override fun getColor(param: Entity): Color4b = throw NotImplementedError()
     }
 
     val renderHandler = handler<WorldRenderEvent> { event ->

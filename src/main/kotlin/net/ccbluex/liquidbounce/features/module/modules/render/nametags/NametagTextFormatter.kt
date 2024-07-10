@@ -26,6 +26,7 @@ import net.ccbluex.liquidbounce.utils.client.mc
 import net.ccbluex.liquidbounce.utils.entity.getActualHealth
 import net.ccbluex.liquidbounce.utils.entity.ping
 import net.minecraft.entity.Entity
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import kotlin.math.roundToInt
@@ -41,7 +42,11 @@ class NametagTextFormatter(private val entity: Entity) {
             outputBuilder.append(this.pingText).append(" ")
         }
 
-        outputBuilder.append("${this.nameColor}${ModuleNameProtect.replace(entity.displayName!!.string)}")
+        if (entity is ItemEntity) {
+            outputBuilder.append("${this.nameColor}${(entity.stack.name!!.string)}")
+        } else {
+            outputBuilder.append("${this.nameColor}${ModuleNameProtect.replace(entity.displayName!!.string)}")
+        }
 
         if (ModuleNametags.Health.enabled) {
             outputBuilder.append(" ").append(this.healthText)

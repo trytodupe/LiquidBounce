@@ -5,6 +5,7 @@ import net.ccbluex.liquidbounce.config.ChoiceConfigurable
 import net.ccbluex.liquidbounce.render.engine.Color4b
 import net.ccbluex.liquidbounce.render.utils.rainbow
 import net.minecraft.block.BlockState
+import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.util.math.BlockPos
 
@@ -46,8 +47,11 @@ class MapColorMode(
 
 class GenericEntityHealthColorMode(
     override val parent: ChoiceConfigurable<*>
-) : GenericColorMode<LivingEntity>("Health") {
-    override fun getColor(param: LivingEntity): Color4b {
+) : GenericColorMode<Entity>("Health") {
+    override fun getColor(param: Entity): Color4b {
+        if (param !is LivingEntity) {
+            return Color4b.WHITE
+        }
         val health = param.health
         val maxHealth = param.maxHealth
 
