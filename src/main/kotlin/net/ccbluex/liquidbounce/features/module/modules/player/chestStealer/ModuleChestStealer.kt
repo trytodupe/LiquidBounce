@@ -31,6 +31,7 @@ import net.ccbluex.liquidbounce.features.module.modules.player.invcleaner.*
 import net.ccbluex.liquidbounce.utils.inventory.*
 import net.ccbluex.liquidbounce.utils.item.*
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
+import net.minecraft.text.Text
 import kotlin.math.ceil
 
 /**
@@ -146,7 +147,8 @@ object ModuleChestStealer : Module("ChestStealer", Category.PLAYER) {
     private fun isScreenTitleChest(screen: GenericContainerScreen): Boolean {
         val titleString = screen.title.string
 
-        return titleString.contains("Loot Chest")
+        return  arrayOf("Loot Chest", "Daily Rewards")
+            .any { it == titleString }
     }
 
 
